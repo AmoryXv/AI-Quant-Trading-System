@@ -1,0 +1,3 @@
+C:/Users/ASUS/Desktop/Quant_System/build/CMakeFiles/strategy.dir
+C:/Users/ASUS/Desktop/Quant_System/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/ASUS/Desktop/Quant_System/build/CMakeFiles/ZERO_CHECK.dir
