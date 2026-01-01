@@ -1,0 +1,21 @@
+# --- 忽略编译中间产物 ---
+build/
+*.dll
+*.exe
+*.lib
+*.exp
+*.obj
+
+# --- 忽略 Python 缓存 ---
+__pycache__/
+*.pyc
+
+# --- 忽略 IDE 配置文件 (个人设置) ---
+.vscode/
+
+# --- 忽略数据文件 (通常数据不上 Git，太大了) ---
+data/
+data_processed/
+
+# --- 忽略模型文件 (如果模型很大建议忽略) ---
+models/
