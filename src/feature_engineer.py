@@ -59,7 +59,7 @@ class FeatureEngineer:
         # ================================
         
         # [Factor 1] ROC (Rate of Change): 过去N天的收益率
-        # 动量因子：过去强的大概率未来继续强（或反转）
+        # 动量因子：过去强的大概率未来继续强
         df['ROC_5'] = df['close'].pct_change(5)
         df['ROC_20'] = df['close'].pct_change(20)
         
@@ -77,20 +77,19 @@ class FeatureEngineer:
         # 3. 构建标签 (Y) -> 核心！
         # ================================
         # 目标：预测“未来 5 天”的收益率
-        # shift(-5) 把未来的数据向上平移，让我们在“今天”这一行能看到“未来”的结果
+        # shift(-5) 把未来的数据向上平移
         df['Future_Ret_5'] = df['close'].shift(-5) / df['close'] - 1.0
         
         # ================================
         # 4. 清洗与落盘
         # ================================
-        # 去除因为 rolling 计算产生的 NaN 值（前几十行通常是空的）
-        # 注意：最后 5 行的 Label 也会是 NaN（因为没有未来了），也要去掉
+        # 去除因为 rolling 计算产生的 NaN 值
         df = df.dropna()
         
         if not df.empty:
             save_path = os.path.join(self.output_path, filename)
             df.to_parquet(save_path)
-            # print(f"Processed {filename}") # 太多打印会刷屏，先注释掉
+            # print(f"Processed {filename}") 
 
     def run_batch(self):
         """批量处理所有文件"""
@@ -112,7 +111,6 @@ if __name__ == "__main__":
     engineer = FeatureEngineer()
     engineer.run_batch()
     
-    # 简单的验证：读取一个处理后的文件看看样子
     test_file = os.listdir('./data_processed')[0]
     df_test = pd.read_parquet(os.path.join('./data_processed', test_file))
     

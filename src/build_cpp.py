@@ -92,7 +92,6 @@ add_library(strategy SHARED strategy.cpp)
     # ==========================================
     print("\n>>> [Install] Looking for strategy.dll ...")
     dll_name = "strategy.dll"
-    # CMake 在 Windows 上生成的 DLL 可能藏在这些地方
     possible_paths = [
         os.path.join("build", "Release", dll_name),
         os.path.join("build", "Debug", dll_name),

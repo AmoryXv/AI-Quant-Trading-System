@@ -57,15 +57,14 @@ class BacktestSystem:
         target_col = 'Future_Ret_5'
 
         # ==========================================
-        # 1. AI Optimized Parameters (来自 Optuna)
+        # 1. AI Optimized Parameters (from Optuna)
         # ==========================================
-        # 这些是刚才跑出来的最优解，直接填入
         BEST_PARAMS = {
             'hidden_dim': 64,
             'learning_rate': 0.00014854,
             'epochs': 18,
-            'ma_window': 15,            # AI 认为 15 日均线反应更快
-            'sentiment_threshold': 0.001173, # AI 极其保守，大盘必须明确看涨
+            'ma_window': 15,            
+            'sentiment_threshold': 0.001173, 
             'stock_threshold': 0.00396,      # 个股涨幅门槛
             'top_k': 3
         }
@@ -124,10 +123,10 @@ class BacktestSystem:
             # --- Model Retraining using BEST PARAMS ---
             lstm_model = LSTMPredictor(
                 sequence_length=10, 
-                epochs=BEST_PARAMS['epochs'],           # 使用优化后的轮数
-                hidden_dim=BEST_PARAMS['hidden_dim'],   # 使用优化后的隐层
+                epochs=BEST_PARAMS['epochs'],           
+                hidden_dim=BEST_PARAMS['hidden_dim'],   
                 batch_size=1024,
-                learning_rate=BEST_PARAMS['learning_rate'] # 使用优化后的学习率
+                learning_rate=BEST_PARAMS['learning_rate'] 
             )
             
             try:

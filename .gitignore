@@ -1,19 +1,19 @@
 # .gitignore
 
-# 1. 忽略数据文件 (太大了，Git存不下，且涉及版权)
+# 1. 数据文件 
 data/
 data_processed/
 *.parquet
 *.csv
 
-# 2. 忽略编译产生的二进制文件 (让用户自己编译)
+# 2. 编译产生的二进制文件 
 *.dll
 *.so
 *.pyd
 build/
 .vscode/
 
-# 3. 忽略训练好的模型 (文件较大，如有需要可用 Git LFS，一般简历项目忽略)
+# 3. 训练好的模型 
 models/
 *.pth
 *.pkl

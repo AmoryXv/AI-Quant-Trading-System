@@ -27,9 +27,8 @@ class LSTMNet(nn.Module):
         
     def forward(self, x):
         # x: (Batch, Seq, Feat)
-        self.lstm.flatten_parameters() # 内存连续化，加速 GPU 计算
+        self.lstm.flatten_parameters() 
         out, _ = self.lstm(x)
-        # 取最后一个时间步
         return self.fc(out[:, -1, :])
 
 # ==========================================
@@ -40,8 +39,8 @@ class LSTMPredictor:
                  sequence_length=10, 
                  hidden_dim=64, 
                  num_layers=2, 
-                 batch_size=1024,      # RTX 3060 强力优化：大Batch
-                 epochs=20,            # 避免过拟合
+                 batch_size=1024,      
+                 epochs=20,            
                  learning_rate=0.001, 
                  device=None):
         
@@ -70,7 +69,6 @@ class LSTMPredictor:
             return np.array([]), np.array([])
             
         # 使用 stride trick 可能更快，但为了稳健性，这里保持列表推导
-        # 实际生产中这里通常会用 numpy 的 stride_tricks
         xs = [X[i : i+self.seq_len] for i in range(num_samples)]
         
         if y is not None:
@@ -84,7 +82,7 @@ class LSTMPredictor:
         X = df_train[feature_cols].values.astype(np.float32)
         y = df_train[label_col].values.reshape(-1, 1).astype(np.float32)
         
-        # 2. Robust Preprocessing (Winsorization) - 架构师重点
+        # 2. Robust Preprocessing (Winsorization)
         # 去除 1% 的极端异常值，防止 loss 爆炸
         limit_X = np.percentile(np.abs(X), 99, axis=0)
         limit_X[limit_X == 0] = 1.0 # 避免除零
@@ -102,7 +100,6 @@ class LSTMPredictor:
         y_tensor = torch.FloatTensor(y_seq).to(self.device)
         
         dataset = TensorDataset(X_tensor, y_tensor)
-        # pin_memory=False 因为数据已经在 GPU 了
         loader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True, pin_memory=False)
         
         # 5. Model Setup

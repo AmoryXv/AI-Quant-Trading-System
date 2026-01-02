@@ -35,7 +35,7 @@ def load_resources():
     scaler_x = joblib.load(scaler_x_path)
     
     # 3. 加载模型
-    # 假设参数是固定的 (需与训练时一致)
+    
     input_dim = 7 # ROC_5, ROC_20, Vol_20, RSI, MACD_DIF, MACD_DEA, MACD_HIST
     model = LSTMNet(input_dim=input_dim, hidden_dim=64, num_layers=2)
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
@@ -93,8 +93,6 @@ with col1:
             # 我们假设模型是 Many-to-One 且在这里我们只看当天的因子快照 (简化版推理)
             # *在严谨的生产环境中，这里需要去取该日期前10天的数据*
             
-            # 为了让 Demo 跑起来，我们用当天的特征复制10次模拟序列 (仅作演示 UI 用)
-            # 真实部署时应调用 backtest_engine 里的 _create_sequences
             X_scaled = scaler_x.transform(X_raw)
             X_seq = np.tile(X_scaled[:, np.newaxis, :], (1, 10, 1)) # (N, 10, 7)
             
@@ -133,8 +131,6 @@ with col1:
 
 with col2:
     st.subheader("📊 Performance Metrics")
-    # 这里的数据是硬编码的，实际应该读取 backtest_result.csv
-    # 你可以把刚才回测控制台输出的数据填在这里
     st.metric("Walk-Forward IC", "0.0509", "Excellent")
     st.metric("Hedged Alpha", "+14.88%", "Strong Outperformance")
     st.metric("Max Drawdown", "-5.9%", "Controlled")
@@ -154,9 +150,8 @@ with col2:
 st.markdown("---")
 st.subheader("📈 Walk-Forward Equity Curve (Simulated)")
 
-# 模拟数据 (替换为你真实的策略数据)
+# 模拟数据
 dates = pd.date_range(start='2023-08-01', periods=100)
-# 模拟一个带 Alpha 的曲线
 base = np.linspace(1, 1.15, 100) + np.random.normal(0, 0.01, 100)
 bench = np.linspace(1, 0.9, 100) + np.random.normal(0, 0.01, 100)
 

@@ -70,8 +70,7 @@ if __name__ == "__main__":
     # 1. 获取股票列表
     stock_pool = loader.fetch_hs300_stocks()
     
-    # 为了演示，我们先只下载前 5 只股票测试 (以免你等太久)
-    # 确认没问题后，你可以把 [:5] 去掉，跑全量
+    # 2. 下载数据
     mini_pool = stock_pool
     
     print(f"Start downloading {len(mini_pool)} stocks...")
@@ -84,10 +83,10 @@ if __name__ == "__main__":
                                      end_date='2023-12-31')
         
         if not df.empty:
-            # 文件名处理: sz.000001 -> sz000001
+            
             safe_name = stock.replace('.', '') 
             loader.save_to_parquet(df, f'{safe_name}_2023.parquet')
             
-    # 程序结束时显式退出，不再依赖 __del__，消除报错
+    
     bs.logout()
     print("All tasks finished.")

@@ -39,7 +39,6 @@ class QuantModeler:
         df = self.load_and_merge_data()
         
         # 定义特征列 (X) 和 目标列 (Y)
-        # 注意：不要把 trade_date 和 ts_code 放进特征里，模型看不懂代码
         feature_cols = ['ROC_5', 'ROC_20', 'Vol_20', 'RSI', 'MACD_DIF', 'MACD_DEA', 'MACD_HIST']
         label_col = 'Future_Ret_5'
         
@@ -59,7 +58,7 @@ class QuantModeler:
         print(f"Training samples: {len(X_train)}, Testing samples: {len(X_test)}")
         
         # 3. 建立并训练模型
-        # XGBRegressor: 我们是回归问题（预测具体收益率数值），不是分类
+        # XGBRegressor: 
         model = xgb.XGBRegressor(
             max_depth=4,            # 树深，防止过拟合
             learning_rate=0.05,     # 学习率
@@ -72,13 +71,12 @@ class QuantModeler:
         model.fit(X_train, y_train)
         
         # 4. 预测与评估
-        # 我们让模型给测试集的每一个样本打分
         pred_test = model.predict(X_test)
         
         # 计算 IC (Information Coefficient) - 预测值与真实值的皮尔逊相关系数
         ic_score = np.corrcoef(y_test, pred_test)[0, 1]
         
-        # 计算 RankIC - 预测排名与真实排名的斯皮尔曼相关系数 (更鲁棒，量化更常用)
+        # 计算 RankIC - 预测排名与真实排名的斯皮尔曼相关系数 
         rank_ic_score, _ = spearmanr(y_test, pred_test)
         
         print("\n" + "="*30)
@@ -88,7 +86,6 @@ class QuantModeler:
         print("="*30 + "\n")
         
         # 5. 特征重要性分析 (Feature Importance)
-        # 看看模型认为哪个因子最重要？
         xgb.plot_importance(model)
         plt.title("Feature Importance")
         plt.show()

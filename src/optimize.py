@@ -47,8 +47,7 @@ FEATURE_COLS = ['ROC_5', 'ROC_20', 'Vol_20', 'RSI', 'MACD_DIF', 'MACD_DEA', 'MAC
 TARGET_COL = 'Future_Ret_5'
 
 # 划分验证集 (Validation Set)
-# 注意：我们用 2023-01 到 2023-09 做训练，用 2023-10 到 2023-12 做验证优化
-# 这样能保证我们选出来的参数在"困难模式"（2023Q4）下也是有效的
+# 我们用 2023-01 到 2023-09 做训练，用 2023-10 到 2023-12 做验证优化
 SPLIT_DATE = pd.to_datetime('2023-10-01')
 TRAIN_DF = FULL_DF[FULL_DF['trade_date'] < SPLIT_DATE].copy()
 VAL_DF = FULL_DF[FULL_DF['trade_date'] >= SPLIT_DATE].copy()
@@ -76,7 +75,6 @@ def objective(trial):
     # -----------------------------------
     # B. 训练 LSTM 模型
     # -----------------------------------
-    # 为了速度，batch_size 固定大一点
     model = LSTMPredictor(
         sequence_length=10,
         epochs=epochs,
@@ -164,7 +162,7 @@ def objective(trial):
     # -----------------------------------
     # 我们希望：IC 高，且 实盘 Alpha 收益高
     # 混合打分：Score = RankIC * 0.3 + AlphaReturn * 0.7
-    # 这样更偏向于"能赚钱"的参数
+    
     
     final_score = (rank_ic * 0.3) + (cumulative_alpha * 0.7)
     
