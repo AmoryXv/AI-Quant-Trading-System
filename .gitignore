@@ -1,21 +1,28 @@
-# --- 忽略编译中间产物 ---
-build/
-*.dll
-*.exe
-*.lib
-*.exp
-*.obj
+# .gitignore
 
-# --- 忽略 Python 缓存 ---
-__pycache__/
-*.pyc
-
-# --- 忽略 IDE 配置文件 (个人设置) ---
-.vscode/
-
-# --- 忽略数据文件 (通常数据不上 Git，太大了) ---
+# 1. 忽略数据文件 (太大了，Git存不下，且涉及版权)
 data/
 data_processed/
+*.parquet
+*.csv
 
-# --- 忽略模型文件 (如果模型很大建议忽略) ---
+# 2. 忽略编译产生的二进制文件 (让用户自己编译)
+*.dll
+*.so
+*.pyd
+build/
+.vscode/
+
+# 3. 忽略训练好的模型 (文件较大，如有需要可用 Git LFS，一般简历项目忽略)
 models/
+*.pth
+*.pkl
+*.json
+
+# 4. Python 缓存与环境
+__pycache__/
+*.py[cod]
+.venv/
+env/
+quant_env/
+.DS_Store

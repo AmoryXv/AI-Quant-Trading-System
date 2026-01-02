@@ -1,22 +1,45 @@
-# AI-Driven Quant Trading System (A股量化选股系统)
+# A-Share AI Quant System (LSTM + C++ Hybrid)
 
-## Project Overview (项目简介)
-基于 XGBoost 与多因子模型（Multi-Factor Model）的 A 股量化选股系统。项目实现了从数据清洗、因子挖掘、机器学习建模到回测分析的全流程闭环。在 2023 Q4 的熊市环境下，策略跑赢沪深300基准指数约 5%，展现了显著的超额收益能力。
+基于深度学习 (LSTM) 与 Optuna 自适应优化的 A 股量化择时系统。
+An AI-driven quantitative trading system for A-Share market featuring LSTM predictions, C++ signal acceleration, and Walk-Forward backtesting.
 
-## Key Features (核心特性)
-* **Data Engineering**: 封装 Baostock 接口，实现 300+ 股票的自动清洗与前复权处理 (Parquet 存储)。
-* **Factor Mining**: 构建了动量 (ROC, RSI)、波动率 (Volatility)、趋势 (MACD) 等多维度因子库。
-* **ML Modeling**: 采用 XGBoost 进行滚动窗口训练，RankIC 达到 0.06，有效捕捉市场短期规律。
-* **Backtesting**: 实现了 Top-K 轮动策略回测引擎，支持 Python/C++ 混合调用 (Hybrid Architecture)。
+## 🚀 Key Features (核心特性)
 
-## Tech Stack (技术栈)
-* **Core**: Python 3.9, Pandas, NumPy
-* **ML**: XGBoost, Scikit-Learn
-* **Performance**: C++ (DLL via ctypes)
-* **Data**: Baostock, Parquet
+* **Hybrid Architecture**: Python (PyTorch) 负责模型训练与复杂风控，C++ (DLL) 负责毫秒级信号初筛，实现计算加速。
+* **Deep Learning Alpha**: 使用 LSTM 网络提取非线性时序因子，经过 **Optuna** 全局参数寻优，测试集 Rank IC 达到 **0.08+**。
+* **Robust Backtesting**: 构建了 **Walk-Forward (滚动时间窗)** 回测框架，杜绝未来函数 (Look-ahead Bias)。
+* **Risk Management**: 集成 MA 趋势跟踪与大盘情绪 (Market Sentiment) 双重熔断机制，在 2023 年极端行情下实现 **16.76% 的纯 Alpha 超额收益**。
+* **Visualization**: 集成 Streamlit 交互式看板，支持实盘信号监控与因子分析。
 
-## Performance (回测表现)
-* **Benchmark**: CSI 300 (沪深300)
-* **Period**: 2023.10.01 - 2023.12.31
-* **Strategy Return**: -1.75% (vs Benchmark ~ -8%)
-* **Alpha**: +6.25%
+## 🛠️ Tech Stack (技术栈)
+
+* **Core**: Python 3.9, C++17
+* **ML/DL**: PyTorch (CUDA), XGBoost, Scikit-learn
+* **Optimization**: Optuna (Bayesian Optimization)
+* **Data/Backtest**: Pandas, Numpy, Joblib
+* **Visualization**: Streamlit, Matplotlib, Plotly
+
+## 📊 Performance (回测表现)
+
+*Test Period: 2023/08 - 2024/01 (Walk-Forward Analysis)*
+
+| Metric | Value | Note |
+| :--- | :--- | :--- |
+| **Rank IC** | **0.0838** | Top-tier prediction quality |
+| **Hedged Alpha** | **+16.76%** | Pure excess return vs Benchmark |
+| **Long-Only Return**| **+0.96%** | Positive return in bear market (-15% drop) |
+| **Win Rate** | High | Strict filtering (Active Days < 5%) |
+
+## 📂 Project Structure
+
+```text
+Quant_System/
+├── src/
+│   ├── model_lstm.py       # LSTM Network & Sklearn-style Wrapper
+│   ├── backtest_engine.py  # Walk-Forward Backtest Engine (Main)
+│   ├── optimize.py         # Optuna Hyperparameter Tuning
+│   ├── dashboard.py        # Streamlit Dashboard
+│   ├── strategy.cpp        # C++ Signal Generation Source
+│   └── build_cpp.py        # C++ Compilation Script
+├── requirements.txt        # Dependencies
+└── README.md
